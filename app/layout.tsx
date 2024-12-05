@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Nunito } from "next/font/google";
 import Navbar from "./components/navbar/Navbar";
-import Modal from "./components/modals/Modal";
+import RegisterModal from "./components/modals/RegisterModal";
 
 import "./globals.css";
 import ClientOnly from "./components/ClientOnly";
@@ -28,7 +28,7 @@ export default function RootLayout({
         className={font.className}
       >
         <ClientOnly>
-          <Modal isOpen title="Hello World!" actionLabel="Submit" />
+          <RegisterModal />
           <Navbar />
           </ClientOnly>
         {children}
