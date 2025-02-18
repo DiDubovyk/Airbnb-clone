@@ -1,4 +1,5 @@
 import prisma from "@/app/libs/prismadb"
+import { listenerCount } from "node:stream";
 
 
 export default async function getListings() {
@@ -7,8 +8,13 @@ export default async function getListings() {
             orderBy: {
                 createdAt: 'desc'
             }
-        })
-        return listings;
+        });
+        const safeListings = listings.map((listing) => ({
+            ...listing,
+            createdAt: listing.createdAt.toISOString(),
+        }));
+
+        return safeListings;
     } catch (error: any) {
         throw new Error(error)
     }

@@ -4,7 +4,7 @@ import Modal from "./Modal";
 import { useState } from "react";
 import { useMemo } from "react";
 import Heading from "../Heading";
-import { categories } from "../navbar/Categories";
+import { categories } from "@/app/constants/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import CountrySelect from "../inputs/CountrySelect";
