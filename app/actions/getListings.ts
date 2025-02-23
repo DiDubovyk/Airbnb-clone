@@ -1,5 +1,5 @@
 import prisma from "@/app/libs/prismadb"
-import { listenerCount } from "node:stream";
+
 
 
 export default async function getListings() {
