@@ -255,4 +255,4 @@ const RentModal = () => {
       body={bodyContent} />
   )
 }
-export default RentModal
+export default RentModal;
