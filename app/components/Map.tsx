@@ -20,6 +20,10 @@ interface MapProps {
   center?: number[];
 }
 
+interface LeafletContainer extends HTMLElement {
+  _leaflet_id?: number | null;
+}
+
 const Map: React.FC<MapProps> = ({ center }) => {
   // Generate a unique id for this component instance
   const generatedId = useId();
@@ -33,9 +37,11 @@ const Map: React.FC<MapProps> = ({ center }) => {
         mapRef.current = null;
       }
       // Additionally, clear the _leaflet_id on the container element
-      const container = document.getElementById(`map-container-${generatedId}`);
-      if (container && (container as any)._leaflet_id) {
-        (container as any)._leaflet_id = null;
+      const container = document.getElementById(
+        `map-container-${generatedId}`
+      ) as LeafletContainer | null;
+      if (container && container._leaflet_id) {
+        container._leaflet_id = null;
       }
     };
   }, [generatedId]);
