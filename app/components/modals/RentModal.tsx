@@ -7,7 +7,7 @@ import Heading from "../Heading";
 import { categories } from "@/app/constants/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import CountrySelect from "../inputs/CountrySelect";
+import CountrySelect, { CountrySelectValue } from "../inputs/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
@@ -26,6 +26,18 @@ enum STEPS {
   PRICE = 5
 }
 
+interface RentFormValues {
+  category: string;
+  location: CountrySelectValue | undefined;
+  guestCount: number;
+  roomCount: number;
+  bathroomCount: number;
+  imageSrc: string;
+  price: number;
+  title: string;
+  description: string;
+}
+
 const RentModal = () => {
   const router = useRouter();
   const rentModal = useRentModal();
@@ -42,10 +54,10 @@ const RentModal = () => {
       errors,
     },
     reset
-  } = useForm<FieldValues>({
+  } = useForm<RentFormValues>({
     defaultValues: {
       category: '',
-      location: null,
+      location: undefined,
       guestCount: 1,
       roomCount: 1,
       bathroomCount: 1,
@@ -65,15 +77,18 @@ const RentModal = () => {
 
   const Map = useMemo(() => dynamic(() => import('../Map'), {
     ssr:false
-  }), [location])
+  }), [])
 
-  const setCustomValue = (id: string, value: any) => {
+  const setCustomValue = (
+    id: keyof RentFormValues,
+    value: RentFormValues[typeof id]
+  ) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
-      shouldTouch: true
-    })
-  }
+      shouldTouch: true,
+    });
+  };
   const onBack = () => {
     setStep((value) => value - 1)
   };

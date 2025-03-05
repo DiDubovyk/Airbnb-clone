@@ -19,28 +19,31 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
     const params = useSearchParams();
 
     const handleClick = useCallback(() => {
-        let currentQuery = {};
+      let currentQuery: Record<string, string | string[]> = {};
 
-        if (params) {
-            currentQuery = qs.parse(params.toString());
-        }
+      if (params) {
+        currentQuery = qs.parse(params.toString()) as Record<string, string | string[]>;
+      }
 
-        const updatedQuery: any = {
-            ...currentQuery,
-            category:label
-        }
+      const updatedQuery: Record<string, string | string[]> = {
+        ...currentQuery,
+        category: label,
+      };
 
-        if (params?.get('category') === label) {
-            delete updatedQuery.category;
-        }
+      if (params?.get("category") === label) {
+        delete updatedQuery.category;
+      }
 
-        const url = qs.stringifyUrl({
-            url: '/',
-            query: updatedQuery
-        }, { skipNull: true });
+      const url = qs.stringifyUrl(
+        {
+          url: "/",
+          query: updatedQuery,
+        },
+        { skipNull: true }
+      );
 
-        router.push(url);
-    }, [label, params, router])
+      router.push(url);
+    }, [label, params, router]);
   return (
       <div
           onClick={handleClick}

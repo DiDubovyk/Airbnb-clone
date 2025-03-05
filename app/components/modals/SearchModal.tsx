@@ -7,6 +7,7 @@ import { Range } from "react-date-range";
 import dynamic from "next/dynamic";
 import CountrySelect, { CountrySelectValue } from "../inputs/CountrySelect";
 import qs from "query-string";
+import { ParsedUrlQueryInput } from "querystring";
 import { formatISO } from "date-fns";
 import Heading from "../Heading";
 import Calendar from "../inputs/Calendar";
@@ -60,7 +61,7 @@ const SearchModal = () => {
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery: any = {
+    const updatedQuery: ParsedUrlQueryInput = {
       ...currentQuery,
       locationValue: location?.value,
       guestCount,
@@ -114,7 +115,7 @@ const SearchModal = () => {
     }
 
     return "Back";
-  }, []);
+  }, [step]);
 
   let bodyContent = (
     <div className="flex flex-col gap-8">

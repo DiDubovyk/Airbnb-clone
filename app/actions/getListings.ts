@@ -24,7 +24,7 @@ export default async function getListings(params: IListingParams) {
       category,
     } = await params;
 
-    const query: any = {};
+    const query: Record<string, unknown> = {};
 
     if (userId) {
       query.userId = userId;
@@ -88,6 +88,7 @@ export default async function getListings(params: IListingParams) {
 
     return safeListings;
   } catch (error) {
-    throw new Error();
+    console.error(error);
+    throw new Error("Failed to fetch listings");
   }
 }

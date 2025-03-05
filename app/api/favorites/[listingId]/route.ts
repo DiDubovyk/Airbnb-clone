@@ -1,15 +1,12 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/app/libs/prismadb';
-import getCurrentUser from '@/app/actions/getCurrentUser';
+import { NextResponse } from "next/server";
+import prisma from "@/app/libs/prismadb";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
 interface IParams {
   listingId?: string;
 }
 
-export async function POST(
-  request: Request,
-  context: { params: IParams }
-) {
+export async function POST(request: Request, context: { params: IParams }) {
   const { params } = context;
   const currentUser = await getCurrentUser();
 
@@ -20,29 +17,26 @@ export async function POST(
   const { listingId } = await params;
 
   if (!listingId || typeof listingId !== "string") {
-    throw new Error('Invalid ID!');
+    throw new Error("Invalid ID!");
   }
 
-  let favoriteIds = [...(currentUser.favouriteIds || [])];
+  const favoriteIds = [...(currentUser.favoriteIds || [])];
 
   favoriteIds.push(listingId);
 
   const user = await prisma.user.update({
     where: {
-      id: currentUser.id
+      id: currentUser.id,
     },
     data: {
-      favouriteIds: favoriteIds
-    }
+      favoriteIds: favoriteIds,
+    },
   });
 
   return NextResponse.json(user);
 }
 
-export async function DELETE(
-  request: Request,
-  context: { params: IParams }
-) {
+export async function DELETE(request: Request, context: { params: IParams }) {
   const { params } = context;
   const currentUser = await getCurrentUser();
 
@@ -53,20 +47,20 @@ export async function DELETE(
   const { listingId } = await params;
 
   if (!listingId || typeof listingId !== "string") {
-    throw new Error('Invalid ID!');
+    throw new Error("Invalid ID!");
   }
 
-  let favoriteIds = [...(currentUser.favouriteIds || [])];
+  let favoriteIds = [...(currentUser.favoriteIds || [])];
 
   favoriteIds = favoriteIds.filter((id) => id !== listingId);
 
   const user = await prisma.user.update({
     where: {
-      id: currentUser.id
+      id: currentUser.id,
     },
     data: {
-      favouriteIds: favoriteIds
-    }
+      favoriteIds: favoriteIds,
+    },
   });
 
   return NextResponse.json(user);

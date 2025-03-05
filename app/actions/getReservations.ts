@@ -12,7 +12,7 @@ export default async function getReservations(
     try {
         const { listingId, userId, authorId } = await params;
 
-        const query: any = {};
+        const query: Record<string, unknown> = {};
 
         if (listingId) {
             query.listingId = listingId;
@@ -48,7 +48,7 @@ export default async function getReservations(
         }));
 
         return safeReservations;
-    } catch (error: any) {
-        throw new Error(error)
+    } catch (error: unknown) {
+        console.error(error)
     }
 };
