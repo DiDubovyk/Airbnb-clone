@@ -3,7 +3,7 @@ import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 interface IParams {
-  listingId?: string;
+  listingId: string;
 }
 
 export async function POST(request: Request, context: { params: IParams }) {
