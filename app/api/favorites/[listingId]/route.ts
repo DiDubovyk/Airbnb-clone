@@ -2,26 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
+function wrapParams<T>(params: T): Promise<T> {
+  return Promise.resolve(params);
+}
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { listingId: string } }
 ) {
-  const currentUser = await getCurrentUser();
+ const { listingId } = await wrapParams(params);
 
+  const currentUser = await getCurrentUser();
   if (!currentUser) {
     return NextResponse.error();
   }
-
-  const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
     throw new Error("Invalid ID!");
   }
 
-  const favoriteIds = [...(currentUser.favoriteIds || []), listingId];
+  const favoriteIds = [...(currentUser.favoriteIds || [])];
 
-  favoriteIds.push(listingId);
+  if (!favoriteIds.includes(listingId)) {
+    favoriteIds.push(listingId);
+  }
 
   const user = await prisma.user.update({
     where: {
@@ -39,13 +43,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { listingId: string } }
 ) {
+  const { listingId } = await wrapParams(params);
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     return NextResponse.error();
   }
-
-  const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
     throw new Error("Invalid ID!");
