@@ -5,7 +5,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Record<string, string> }
+  { params }: { params: { listingId: string } }
 ) {
   const currentUser = await getCurrentUser();
 
@@ -35,7 +35,10 @@ export async function POST(
   return NextResponse.json(user);
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Record<string, string> }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { listingId: string } }
+) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
