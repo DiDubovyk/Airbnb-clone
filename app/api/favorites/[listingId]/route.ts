@@ -6,15 +6,17 @@ interface IParams {
   listingId: string;
 }
 
-export async function POST(request: Request, context: { params: IParams }) {
-  const { params } = context;
+export async function POST(
+  request: Request,
+  { params }: { params: { listingId: string } }
+) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     return NextResponse.error();
   }
 
-  const { listingId } = await params;
+  const { listingId } = params;
 
   if (!listingId || typeof listingId !== "string") {
     throw new Error("Invalid ID!");
