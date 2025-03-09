@@ -1,34 +1,40 @@
-import { NextResponse } from "next/server";
-
+import { NextRequest, NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
 
-interface IParams {
-    listingId?: string;
-}
+export async function DELETE(request: NextRequest) {
+  try {
+    // Extract listingId from the request's URL
+    const { searchParams } = new URL(request.url);
+    const listingId = searchParams.get("listingId");
 
-export async function DELETE(
-    request: Request,
-    {params}: {params: IParams}
-) {
     const currentUser = await getCurrentUser();
 
     if (!currentUser) {
-        return NextResponse.error();
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { listingId } = await params;
-
-    if (!listingId || typeof listingId !== 'string') {
-        throw new Error('Invalid ID')
+    if (!listingId || typeof listingId !== "string") {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    const listing = await prisma.listing.deleteMany({
-        where: {
-            id: listingId,
-            userId: currentUser.id
-        }
-    })
+    // Use delete instead of deleteMany for single deletion
+    const listing = await prisma.listing.delete({
+      where: {
+        id: listingId,
+        userId: currentUser.id,
+      },
+    });
 
-    return NextResponse.json(listing);
+    return NextResponse.json({
+      message: "Listing deleted successfully",
+      listing,
+    });
+  } catch (error) {
+    console.error("Error in DELETE /listing:", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
+  }
 }
