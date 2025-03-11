@@ -22,7 +22,7 @@ const ReservationsPage = async () => {
         authorId: currentUser.id
     });
 
-    if (reservations.length === 0) {
+    if (!reservations || reservations.length === 0) {
         return (
             <ClientOnly>
                 <EmptyState title="No reservations found"
