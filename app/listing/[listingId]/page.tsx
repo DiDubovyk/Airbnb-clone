@@ -12,8 +12,7 @@ interface IParams {
 const ListingPage = async ({ params }: { params: IParams }) => {
   try {
     // Directly access the listingId from params (no need for URL parsing)
-    const resolvedParams = await params;
-    const listingId = resolvedParams?.listingId;
+    const listingId = params.listingId;
 
     if (!listingId) {
       return (
@@ -24,9 +23,11 @@ const ListingPage = async ({ params }: { params: IParams }) => {
     }
 
     // Fetch data
-    const listing = await getListingById({ listingId });
-    const reservations = await getReservations({ listingId });
-    const currentUser = await getCurrentUser();
+   const [listing, reservations, currentUser] = await Promise.all([
+     getListingById({ listingId }),
+     getReservations({ listingId }),
+     getCurrentUser(),
+   ]);
 
     // Handle missing listing
     if (!listing) {
