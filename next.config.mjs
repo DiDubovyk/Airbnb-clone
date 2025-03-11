@@ -1,6 +1,7 @@
 const nextConfig = {
-  /* config options here */
-  reactStrictMode: false,
+  experimental: {
+    appDir: true,
+  },
   images: {
     remotePatterns: [
       {
